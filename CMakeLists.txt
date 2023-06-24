@@ -1,26 +1,40 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(Application VERSION 0.1.0)
-set(EXECUTABLE_OUTPUT_PATH "bin")
-add_subdirectory(deps)
+
+if(MSVC)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC)
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/UNIX)
+endif(MSVC)
+
 find_package(OpenGL REQUIRED)
+set(OpenGL_GL_PREFERENCE GLVND)
 set(BUILD_SHARED_LIBS OFF)
 
-include_directories(
-    deps/glfw-3.3.8/include
-    deps/glew-2.2.0/include
-    deps/glm/include
-    .
-)
-
 if(WIN32)
-    set(OpenGL_GL_PREFERENCE GLVND)
     list(APPEND ALL_LIBS OpenGL::GL)
-    add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 else()
-    set(OpenGL_GL_PREFERENCE LEGACY)
     list(APPEND ALL_LIBS OpenGL::OpenGL)
-    add_executable(${CMAKE_PROJECT_NAME} main.cpp)
     target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC -g -Wall -Wunused -Wno-dev)
 endif()
 
-target_link_libraries(${CMAKE_PROJECT_NAME} glfw glew_s glm::glm)
+set(DEPENDENCY_INCLUDES
+    ${PROJECT_SOURCE_DIR}/deps/glfw-3.3.8/include
+    ${PROJECT_SOURCE_DIR}/deps/glew-2.2.0/include
+    ${PROJECT_SOURCE_DIR}/deps/glm/include
+    ${PROJECT_SOURCE_DIR}/deps/spdlog/include
+)
+
+set(DEPENDENCY_LIBS
+    glfw
+    glew_s
+    glm::glm
+)
+
+add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
+set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${DEPENDENCY_INCLUDES})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${DEPENDENCY_LIBS})
+
+add_subdirectory(deps)
+add_subdirectory(src)

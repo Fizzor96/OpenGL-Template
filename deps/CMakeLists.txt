@@ -6,3 +6,6 @@ add_subdirectory(glew-2.2.0/build/cmake)
 
 # GLM
 add_subdirectory(glm)
+
+# spdlog
+add_subdirectory(spdlog)
