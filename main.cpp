@@ -4,8 +4,6 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
-// Hello
-
 using namespace glm;
 
 int main(void)
