@@ -3,11 +3,31 @@
 Application::Application(const char *windowTitle, const int &windowWidth, const int &windowHeight)
     : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle)
 {
+    spdlog::set_pattern("[%H:%M] %^%v%$");
 }
 
 Application::~Application()
 {
     cleanup();
+}
+
+void Application::handleInput()
+{
+    glfwPollEvents();
+}
+
+void Application::draw()
+{
+    triangle->render();
+}
+
+void Application::update()
+{
+}
+
+void Application::initCustomObjects()
+{
+    triangle = new Triangle();
 }
 
 void Application::run()
@@ -16,7 +36,11 @@ void Application::run()
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
     {
         handleInput();
-        renderFrame();
+        update();
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        draw();
+        glfwSwapBuffers(window);
     }
     cleanup();
 }
@@ -43,7 +67,8 @@ void Application::initialize()
     setupContext();
     initializeGLEW();
     setViewport();
-    triangle = new Triangle();
+    initCustomObjects();
+    spdlog::info("Initialization done!");
 }
 
 void Application::createWindow()
@@ -58,6 +83,7 @@ void Application::createWindow()
     if (!window)
     {
         glfwTerminate();
+        spdlog::error("Failed to create window");
         std::exit(1);
     }
 
@@ -98,19 +124,6 @@ void Application::setViewport()
     glViewport(0, 0, bufferWidth, bufferHeight);
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-}
-
-void Application::handleInput()
-{
-    glfwPollEvents();
-}
-
-void Application::renderFrame()
-{
-    glClearColor(0.f, 0.f, 0.f, 1.f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    triangle->render();
-    glfwSwapBuffers(window);
 }
 
 void Application::cleanup()

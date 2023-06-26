@@ -24,14 +24,16 @@ public:
     int getBufferHeight() const;
 
 private:
+    void handleInput();
+    void draw();
+    void update();
+    void initCustomObjects();
     void initialize();
     void createWindow();
     void setupContext();
     void initializeGLEW();
     void initializeGLFW();
     void setViewport();
-    void handleInput();
-    void renderFrame();
     void cleanup();
 
     GLFWwindow *window;
