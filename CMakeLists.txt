@@ -9,7 +9,6 @@ if(WIN32)
     list(APPEND ALL_LIBS OpenGL::GL)
 else()
     list(APPEND ALL_LIBS OpenGL::OpenGL)
-    target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC -g -Wall -Wunused -Wno-dev)
 endif(WIN32)
 
 set(DEPENDENCY_INCLUDES
