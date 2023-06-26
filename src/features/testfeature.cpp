@@ -1,5 +1,4 @@
-#include "testfeature.hpp"
-#include "spdlog/spdlog.h"
+#include <features/testfeature.hpp>
 
 void MyHelloWorld()
 {
