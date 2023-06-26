@@ -1,6 +1,10 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
+#ifdef MSVC
+#include <Windows.h>
+#endif
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>

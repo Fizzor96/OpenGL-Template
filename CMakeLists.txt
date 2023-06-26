@@ -29,19 +29,20 @@ set(DEPENDENCY_LIBS
     glm::glm
 )
 
+set(SUBSYS_WIN OFF CACHE BOOL "set the subsystem to windows if enabled (Windows - MSVC)")
+
 if(MSVC)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC)
+    add_compile_definitions(MSVC)
 
-    if(FALSE)
-        # message(STATUS "ACTIVE CONFIG DEBUG")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
-        add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
-    else()
-        # message(STATUS "ACTIVE CONFIG NOT DEBUG")
-        add_compile_definitions(RELEASE_MSVC)
+    if(SUBSYS_WIN)
+        add_compile_definitions(SUBSYS_WIN)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
         add_executable(${CMAKE_PROJECT_NAME} WIN32 src/main.cpp)
-    endif()
+    else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
+        add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
+    endif(SUBSYS_WIN)
 else()
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/UNIX)
     add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
