@@ -7,6 +7,8 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <core/keyboard.hpp>
+#include <core/mouse.hpp>
 #include <core/triangle.hpp>
 #include <iostream>
 #include <spdlog/spdlog.h>
@@ -24,16 +26,19 @@ public:
     int getBufferHeight() const;
 
 private:
-    void handleInput();
     void draw();
     void update();
     void initCustomObjects();
+
+private:
     void initialize();
     void createWindow();
     void setupContext();
     void initializeGLEW();
     void initializeGLFW();
+    void initializeInput();
     void setViewport();
+    void handleInput();
     void cleanup();
 
     GLFWwindow *window;

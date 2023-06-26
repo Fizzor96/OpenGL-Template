@@ -11,9 +11,9 @@ Application::~Application()
     cleanup();
 }
 
-void Application::handleInput()
+void Application::initCustomObjects()
 {
-    glfwPollEvents();
+    triangle = new Triangle();
 }
 
 void Application::draw()
@@ -23,11 +23,6 @@ void Application::draw()
 
 void Application::update()
 {
-}
-
-void Application::initCustomObjects()
-{
-    triangle = new Triangle();
 }
 
 void Application::run()
@@ -68,7 +63,7 @@ void Application::initialize()
     initializeGLEW();
     setViewport();
     initCustomObjects();
-    spdlog::info("Initialization done!");
+    initializeInput();
 }
 
 void Application::createWindow()
@@ -117,6 +112,12 @@ void Application::initializeGLFW()
     }
 }
 
+void Application::initializeInput()
+{
+    glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
+    glfwSetKeyCallback(window, Keyboard::keyCallback);
+}
+
 void Application::setViewport()
 {
     int bufferWidth, bufferHeight;
@@ -124,6 +125,11 @@ void Application::setViewport()
     glViewport(0, 0, bufferWidth, bufferHeight);
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+}
+
+void Application::handleInput()
+{
+    glfwPollEvents();
 }
 
 void Application::cleanup()
