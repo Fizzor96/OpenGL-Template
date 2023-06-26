@@ -1,3 +1,4 @@
 target_sources(${CMAKE_PROJECT_NAME}
     PUBLIC application.cpp
+    PUBLIC triangle.cpp
 )

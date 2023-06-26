@@ -43,6 +43,7 @@ void Application::initialize()
     setupContext();
     initializeGLEW();
     setViewport();
+    triangle = new Triangle();
 }
 
 void Application::createWindow()
@@ -61,7 +62,6 @@ void Application::createWindow()
     }
 
     glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
-    spdlog::info("bufferWidth={0}, bufferHeight={1}", bufferWidth, bufferHeight);
 }
 
 void Application::setupContext()
@@ -107,8 +107,9 @@ void Application::handleInput()
 
 void Application::renderFrame()
 {
-    glClearColor(0.f, 1.f, 0.f, 1.f);
+    glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
+    triangle->render();
     glfwSwapBuffers(window);
 }
 

@@ -7,6 +7,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <core/triangle.hpp>
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <string>
@@ -37,6 +38,7 @@ private:
     std::string windowTitle;
     int windowWidth, windowHeight;
     int bufferWidth, bufferHeight;
+    Triangle *triangle;
 };
 
 #endif // __APPLICATION_H__
