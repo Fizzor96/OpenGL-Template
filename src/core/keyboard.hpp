@@ -22,6 +22,11 @@ public:
             spdlog::warn(
                 "Key pressed: Letter = {0}, Keycode = {1},  Scancode = {2}", letter, key, scancode);
         }
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) && action == GLFW_PRESS)
+        {
+            glfwDestroyWindow(window);
+            glfwTerminate();
+        }
     }
 };
 

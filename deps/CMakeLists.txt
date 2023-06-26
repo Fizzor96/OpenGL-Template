@@ -9,3 +9,9 @@ add_subdirectory(glm)
 
 # spdlog
 add_subdirectory(spdlog)
+
+# freetype
+add_subdirectory(freetype)
+
+# imgui
+add_subdirectory(imgui)

@@ -16,6 +16,9 @@ set(DEPENDENCY_INCLUDES
     ${PROJECT_SOURCE_DIR}/deps/glew-2.2.0/include
     ${PROJECT_SOURCE_DIR}/deps/glm/include
     ${PROJECT_SOURCE_DIR}/deps/spdlog/include
+    ${PROJECT_SOURCE_DIR}/deps/freetype/include
+    ${PROJECT_SOURCE_DIR}/deps/imgui
+    ${PROJECT_SOURCE_DIR}/deps/imgui/backends
 )
 
 set(APPLICATION_INCLUDES
@@ -26,6 +29,7 @@ set(DEPENDENCY_LIBS
     glfw
     glew_s
     glm::glm
+    freetype
 )
 
 set(SUBSYS_WIN OFF CACHE BOOL "set the subsystem to windows if enabled (Windows - MSVC)")

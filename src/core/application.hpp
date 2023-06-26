@@ -10,6 +10,8 @@
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
 #include <core/triangle.hpp>
+#include <freetype/freetype.h>
+#include <imgui.h>
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <string>

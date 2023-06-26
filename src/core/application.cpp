@@ -28,7 +28,7 @@ void Application::update()
 void Application::run()
 {
     initialize();
-    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window))
     {
         handleInput();
         update();
