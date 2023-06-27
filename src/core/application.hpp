@@ -48,7 +48,6 @@ private:
     void initializeGLEW();
     void initializeGLFW();
     void initializeInput();
-    void initspdlogpattern();
     void initFpsRelatedVars();
     void setViewport();
     void cleanup();

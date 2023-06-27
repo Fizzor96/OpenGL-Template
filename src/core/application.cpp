@@ -4,14 +4,16 @@ Application *Application::currentApplication = nullptr;
 
 Application *Application::Create(const char *windowTitle, const int &windowWidth, const int &windowHeight)
 {
+    spdlog::set_pattern("[%H:%M:%S] [%^%l%$] %v");
     if (currentApplication == nullptr)
     {
         currentApplication = new Application(windowTitle, windowWidth, windowHeight);
+        spdlog::info("Application created succefully!");
         return currentApplication;
     }
     else
     {
-        spdlog::error("Error! Only one application is allowed!");
+        spdlog::error("Error! Only one application is allowed! Please use the \"GetCurrentApplication()\" method to retrieve the application pointer!");
         return nullptr;
     }
 }
@@ -21,6 +23,7 @@ void Application::Terminate()
     if (currentApplication != nullptr)
     {
         currentApplication->~Application();
+        spdlog::info("Application terminated succesfully!");
     }
 }
 
@@ -99,7 +102,6 @@ void Application::initialize()
     setViewport();
     initCustomObjects();
     initializeInput();
-    initspdlogpattern();
     initFpsRelatedVars();
 }
 
@@ -112,11 +114,6 @@ void Application::initFpsRelatedVars()
     deltaTime = 0.0;
     targetFrameTime = (1.0 / targetfps) * fpsToleranceLimitMultiplyer;
     showFpsInWindowTitle = false;
-}
-
-void Application::initspdlogpattern()
-{
-    spdlog::set_pattern("[%H:%M] %^%v%$");
 }
 
 void Application::createWindow()
