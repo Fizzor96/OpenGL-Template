@@ -1,8 +1,33 @@
 #include <core/application.hpp>
 
+Application *Application::currentApplication = nullptr;
+
+Application *Application::Create(const char *windowTitle, const int &windowWidth, const int &windowHeight)
+{
+    if (currentApplication == nullptr)
+    {
+        currentApplication = new Application(windowTitle, windowWidth, windowHeight);
+        return currentApplication;
+    }
+    else
+    {
+        spdlog::error("Error! Only one application is allowed!");
+        return nullptr;
+    }
+}
+
+void Application::Terminate()
+{
+    if (currentApplication != nullptr)
+    {
+        currentApplication->~Application();
+    }
+}
+
 Application::Application(const char *windowTitle, const int &windowWidth, const int &windowHeight)
     : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle)
 {
+    spdlog::info("good sh1t");
 }
 
 Application::~Application()
@@ -30,16 +55,33 @@ void Application::initializeInput()
     glfwSetKeyCallback(window, Keyboard::traceKeys);
 }
 
-void Application::run()
+void Application::Run()
 {
     initialize();
     while (!glfwWindowShouldClose(window))
     {
+        currentTime = std::chrono::high_resolution_clock::now();
+        deltaTime += std::chrono::duration<double>(currentTime - previousTime).count();
+        previousTime = currentTime;
+
         glfwPollEvents();
-        update();
-        glClear(GL_COLOR_BUFFER_BIT);
-        draw();
-        glfwSwapBuffers(window);
+
+        if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+        {
+            spdlog::warn("FPS: {}", fps);
+        }
+
+        if (deltaTime >= targetFrameTime)
+        {
+            fps = (int)(1.f / deltaTime);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+            update();
+            draw();
+
+            glfwSwapBuffers(window);
+            deltaTime = 0.0;
+        }
     }
     cleanup();
 }
@@ -54,6 +96,16 @@ void Application::initialize()
     initCustomObjects();
     initializeInput();
     initspdlogpattern();
+    initFpsRelatedVars();
+}
+
+void Application::initFpsRelatedVars()
+{
+    targetfps = 60;
+    fps = 0;
+    previousTime = std::chrono::high_resolution_clock::now();
+    deltaTime = 0.0;
+    targetFrameTime = (1.0 / targetfps) * 0.99;
 }
 
 void Application::initspdlogpattern()
@@ -77,6 +129,7 @@ void Application::createWindow()
         std::exit(1);
     }
 
+    // glfwSwapInterval(0);
     glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
 }
 
