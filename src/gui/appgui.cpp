@@ -12,6 +12,7 @@ AppGui::AppGui(GLFWwindow *window)
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330 core");
+    mystr = "Click the button!!!";
 }
 
 AppGui::~AppGui()
@@ -30,13 +31,14 @@ void AppGui::NewFrame()
 
 void AppGui::Setup()
 {
-    ImGui::ShowDemoWindow();
+    // ImGui::ShowDemoWindow();
 
-    ImGui::Begin("Button Example");
-    ImGui::Text("Hello, world!");
-    if (ImGui::Button("Print Hello World"))
+    ImGui::Begin("Example");
+    ImGui::Text(mystr.c_str());
+    if (ImGui::Button("Click me!"))
     {
-        spdlog::info("Hello World from ImGUI!");
+        spdlog::critical("Dave egy buzi!");
+        mystr = "Dave egy buzi!";
     }
     ImGui::End();
 }
