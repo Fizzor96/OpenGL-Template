@@ -7,13 +7,17 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <chrono>
+#include <spdlog/spdlog.h>
+
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
 #include <core/triangle.hpp>
 #include <gui/appgui.hpp>
-#include <spdlog/spdlog.h>
+
+#include <chrono>
 #include <string>
+
+class AppGui;
 
 class Application
 {
@@ -34,6 +38,7 @@ public:
     int getBufferHeight() const;
     void SetFrameRate(unsigned int fps);
     void Toggle_ShowFPSInTitle();
+    int GetCurrentFPS() const;
 
 private:
     void draw();

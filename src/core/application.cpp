@@ -208,6 +208,11 @@ void Application::Toggle_ShowFPSInTitle()
     spdlog::info("Toggle_ShowFPSInTitle: {}", showFpsInWindowTitle);
 }
 
+int Application::GetCurrentFPS() const
+{
+    return fps;
+}
+
 void Application::cleanup()
 {
     if (window)
