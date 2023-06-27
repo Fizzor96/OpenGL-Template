@@ -11,6 +11,7 @@
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
 #include <core/triangle.hpp>
+#include <gui/appgui.hpp>
 #include <spdlog/spdlog.h>
 #include <string>
 
@@ -52,6 +53,7 @@ private:
 
 private:
     Triangle *triangle;
+    AppGui *appgui;
 
 private:
     GLFWwindow *window;

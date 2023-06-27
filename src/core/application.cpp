@@ -40,6 +40,7 @@ Application::~Application()
 void Application::initCustomObjects()
 {
     triangle = new Triangle();
+    appgui = new AppGui(window);
 }
 
 void Application::draw()
@@ -67,6 +68,8 @@ void Application::Run()
         previousTime = currentTime;
 
         glfwPollEvents();
+        appgui->NewFrame();
+        appgui->Setup();
 
         if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         {
@@ -85,6 +88,7 @@ void Application::Run()
 
             update();
             draw();
+            appgui->Render();
 
             glfwSwapBuffers(window);
             deltaTime = 0.0;
@@ -100,9 +104,9 @@ void Application::initialize()
     setupContext();
     initializeGLEW();
     setViewport();
-    initCustomObjects();
     initializeInput();
     initFpsRelatedVars();
+    initCustomObjects();
 }
 
 void Application::initFpsRelatedVars()
