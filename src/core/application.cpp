@@ -3,7 +3,6 @@
 Application::Application(const char *windowTitle, const int &windowWidth, const int &windowHeight)
     : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle)
 {
-    spdlog::set_pattern("[%H:%M] %^%v%$");
 }
 
 Application::~Application()
@@ -25,34 +24,24 @@ void Application::update()
 {
 }
 
+void Application::initializeInput()
+{
+    glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
+    glfwSetKeyCallback(window, Keyboard::traceKeys);
+}
+
 void Application::run()
 {
     initialize();
     while (!glfwWindowShouldClose(window))
     {
-        handleInput();
+        glfwPollEvents();
         update();
-        glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
         draw();
         glfwSwapBuffers(window);
     }
     cleanup();
-}
-
-GLFWwindow *Application::getCurrentContext()
-{
-    return this->window;
-}
-
-int Application::getBufferWidht() const
-{
-    return this->bufferWidth;
-}
-
-int Application::getBufferHeight() const
-{
-    return this->bufferHeight;
 }
 
 void Application::initialize()
@@ -64,6 +53,12 @@ void Application::initialize()
     setViewport();
     initCustomObjects();
     initializeInput();
+    initspdlogpattern();
+}
+
+void Application::initspdlogpattern()
+{
+    spdlog::set_pattern("[%H:%M] %^%v%$");
 }
 
 void Application::createWindow()
@@ -112,12 +107,6 @@ void Application::initializeGLFW()
     }
 }
 
-void Application::initializeInput()
-{
-    glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
-    glfwSetKeyCallback(window, Keyboard::keyCallback);
-}
-
 void Application::setViewport()
 {
     int bufferWidth, bufferHeight;
@@ -127,9 +116,19 @@ void Application::setViewport()
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 }
 
-void Application::handleInput()
+GLFWwindow *Application::getCurrentContext()
 {
-    glfwPollEvents();
+    return this->window;
+}
+
+int Application::getBufferWidht() const
+{
+    return this->bufferWidth;
+}
+
+int Application::getBufferHeight() const
+{
+    return this->bufferHeight;
 }
 
 void Application::cleanup()

@@ -10,8 +10,6 @@
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
 #include <core/triangle.hpp>
-#include <freetype/freetype.h>
-#include <imgui.h>
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <string>
@@ -22,6 +20,7 @@ public:
     Application(const char *windowTitle, const int &windowWidth, const int &windowHeight);
     ~Application();
 
+public:
     void run();
     GLFWwindow *getCurrentContext();
     int getBufferWidht() const;
@@ -39,10 +38,11 @@ private:
     void initializeGLEW();
     void initializeGLFW();
     void initializeInput();
+    void initspdlogpattern();
     void setViewport();
-    void handleInput();
     void cleanup();
 
+private:
     GLFWwindow *window;
     std::string windowTitle;
     int windowWidth, windowHeight;

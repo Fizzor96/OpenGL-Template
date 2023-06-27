@@ -1,7 +1,4 @@
-file(GLOB imgui_src
-    "*.cpp"
-)
-
 target_sources(${CMAKE_PROJECT_NAME}
-    PUBLIC ${imgui_src}
+    PUBLIC imgui_impl_opengl3.cpp
+    PUBLIC imgui_impl_glfw.cpp
 )

@@ -17,9 +17,11 @@ set(DEPENDENCY_INCLUDES
     ${PROJECT_SOURCE_DIR}/deps/glm/include
     ${PROJECT_SOURCE_DIR}/deps/spdlog/include
     ${PROJECT_SOURCE_DIR}/deps/freetype/include
-    ${PROJECT_SOURCE_DIR}/deps/imgui
     ${PROJECT_SOURCE_DIR}/deps/imgui/backends
+    ${PROJECT_SOURCE_DIR}/deps/imgui
 )
+
+set(GLFW_DIR "${PROJECT_SOURCE_DIR}/deps/glfw-3.3.8/glfw")
 
 set(APPLICATION_INCLUDES
     ${PROJECT_SOURCE_DIR}/src

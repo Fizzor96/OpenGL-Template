@@ -8,7 +8,7 @@
 class Keyboard
 {
 public:
-    static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+    static void traceKeys(GLFWwindow *window, int key, int scancode, int action, int mods)
     {
         if (action == GLFW_PRESS)
         {
@@ -22,10 +22,10 @@ public:
             spdlog::warn(
                 "Key pressed: Letter = {0}, Keycode = {1},  Scancode = {2}", letter, key, scancode);
         }
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) && action == GLFW_PRESS)
+
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         {
-            glfwDestroyWindow(window);
-            glfwTerminate();
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
     }
 };
