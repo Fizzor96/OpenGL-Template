@@ -27,7 +27,6 @@ void Application::Terminate()
 Application::Application(const char *windowTitle, const int &windowWidth, const int &windowHeight)
     : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle)
 {
-    spdlog::info("good sh1t");
 }
 
 Application::~Application()
@@ -74,6 +73,11 @@ void Application::Run()
         if (deltaTime >= targetFrameTime)
         {
             fps = (int)(1.f / deltaTime);
+            if (showFpsInWindowTitle)
+            {
+                glfwSetWindowTitle(window, (std::string(windowTitle + " - FPS: " + std::to_string(fps) + " - FrameTime: " + std::to_string(deltaTime))).c_str());
+            }
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             update();
@@ -101,11 +105,13 @@ void Application::initialize()
 
 void Application::initFpsRelatedVars()
 {
+    fpsToleranceLimitMultiplyer = 1.0;
     targetfps = 60;
     fps = 0;
     previousTime = std::chrono::high_resolution_clock::now();
     deltaTime = 0.0;
-    targetFrameTime = (1.0 / targetfps) * 0.99;
+    targetFrameTime = (1.0 / targetfps) * fpsToleranceLimitMultiplyer;
+    showFpsInWindowTitle = false;
 }
 
 void Application::initspdlogpattern()
@@ -182,6 +188,22 @@ int Application::getBufferWidht() const
 int Application::getBufferHeight() const
 {
     return this->bufferHeight;
+}
+
+void Application::SetFrameRate(unsigned int fps)
+{
+    targetfps = fps;
+    targetFrameTime = (1.0 / targetfps) * fpsToleranceLimitMultiplyer;
+}
+
+void Application::Toggle_ShowFPSInTitle()
+{
+    showFpsInWindowTitle = !showFpsInWindowTitle;
+    if (!showFpsInWindowTitle)
+    {
+        glfwSetWindowTitle(window, windowTitle.c_str());
+    }
+    spdlog::info("Toggle_ShowFPSInTitle: {}", showFpsInWindowTitle);
 }
 
 void Application::cleanup()

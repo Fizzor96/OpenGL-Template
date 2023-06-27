@@ -20,6 +20,7 @@ class Application
 {
 public:
     static Application *Create(const char *windowTitle, const int &windowWidth, const int &windowHeight);
+    static Application *GetCurrentApplication() { return currentApplication; };
     static void Terminate();
 
 private:
@@ -32,6 +33,8 @@ public:
     GLFWwindow *getCurrentContext();
     int getBufferWidht() const;
     int getBufferHeight() const;
+    void SetFrameRate(unsigned int fps);
+    void Toggle_ShowFPSInTitle();
 
 private:
     void draw();
@@ -60,7 +63,9 @@ private:
     int bufferWidth, bufferHeight;
 
 private:
+    bool showFpsInWindowTitle;
     unsigned int targetfps, fps;
+    double fpsToleranceLimitMultiplyer;
     std::chrono::high_resolution_clock::time_point previousTime, currentTime;
     long double targetFrameTime, deltaTime;
 };
