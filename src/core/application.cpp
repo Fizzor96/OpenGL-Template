@@ -191,6 +191,7 @@ void Application::SetFrameRate(unsigned int fps)
 {
     targetfps = fps;
     targetFrameTime = (1.0 / targetfps) * fpsToleranceLimitMultiplyer;
+    spdlog::info("TargetFramerate set to: {} FPS", targetfps);
 }
 
 void Application::Toggle_ShowFPSInTitle()
