@@ -11,10 +11,8 @@
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
 #include <core/triangle.hpp>
-#include <iostream>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <thread>
 
 class Application
 {
