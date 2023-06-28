@@ -7,6 +7,18 @@ void Application::framebufferSizeCallback(GLFWwindow *window, int width, int hei
     glViewport(0, 0, width, height);
 }
 
+Application *Application::GetCurrentApplication()
+{
+    if (currentApplication != nullptr)
+    {
+        return currentApplication;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
 Application *Application::Create(const char *windowTitle, const int &windowWidth, const int &windowHeight)
 {
     spdlog::set_pattern("[%H:%M:%S] [%^%l%$] %v");
@@ -102,6 +114,51 @@ void Application::Run()
     cleanup();
 }
 
+void Application::ToggleFullScreen()
+{
+    isfullscreen = glfwGetWindowMonitor(window) != NULL;
+    if (isfullscreen)
+    {
+        glfwSetWindowMonitor(window, NULL, 50, 50, windowWidth, windowHeight, 0);
+        spdlog::info("ToggleFullScreen() called");
+    }
+    else
+    {
+        GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode *videoMode = glfwGetVideoMode(primaryMonitor);
+        glfwSetWindowMonitor(window, primaryMonitor, 50, 50, videoMode->width, videoMode->height, videoMode->refreshRate);
+        spdlog::info("ToggleFullScreen() called");
+    }
+}
+
+void Application::MaximizeWindow()
+{
+    isfullscreen = glfwGetWindowMonitor(window) != NULL;
+    if (!isfullscreen)
+    {
+        maximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
+        if (!maximized)
+        {
+            glfwMaximizeWindow(window);
+            spdlog::info("MaximizeWindow() called");
+        }
+    }
+}
+
+void Application::MinimizeWindow()
+{
+    isfullscreen = glfwGetWindowMonitor(window) != NULL;
+    if (!isfullscreen)
+    {
+        maximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
+        if (maximized)
+        {
+            glfwRestoreWindow(window);
+            spdlog::info("MinimzeWindow() called");
+        }
+    }
+}
+
 void Application::initialize()
 {
     initializeGLFW();
@@ -132,7 +189,7 @@ void Application::createWindow()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+    // glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
     // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE); // Disable window frame and decorations
 
     window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), nullptr, nullptr);
@@ -146,7 +203,7 @@ void Application::createWindow()
     // glfwSwapInterval(0);
     glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
     glfwSetFramebufferSizeCallback(window, Application::framebufferSizeCallback);
-    glfwMaximizeWindow(window);
+    MaximizeWindow();
 }
 
 void Application::setupContext()
@@ -188,16 +245,6 @@ void Application::setViewport()
 GLFWwindow *Application::getCurrentContext()
 {
     return this->window;
-}
-
-int Application::getBufferWidht() const
-{
-    return this->bufferWidth;
-}
-
-int Application::getBufferHeight() const
-{
-    return this->bufferHeight;
 }
 
 void Application::SetFrameRate(unsigned int fps)

@@ -23,7 +23,7 @@ class Application
 {
 public:
     static Application *Create(const char *windowTitle, const int &windowWidth, const int &windowHeight);
-    static Application *GetCurrentApplication() { return currentApplication; };
+    static Application *GetCurrentApplication();
     static void Terminate();
 
 private:
@@ -33,9 +33,10 @@ private:
 
 public:
     void Run();
+    void ToggleFullScreen();
+    void MaximizeWindow();
+    void MinimizeWindow();
     GLFWwindow *getCurrentContext();
-    int getBufferWidht() const;
-    int getBufferHeight() const;
     void SetFrameRate(unsigned int fps);
     void Toggle_ShowFPSInTitle();
     int GetCurrentFPS() const;
@@ -64,8 +65,7 @@ private:
 private:
     GLFWwindow *window;
     std::string windowTitle;
-    int windowWidth, windowHeight;
-    int bufferWidth, bufferHeight;
+    int maximized, isfullscreen, windowWidth, windowHeight, bufferWidth, bufferHeight;
 
 private:
     bool showFpsInWindowTitle;

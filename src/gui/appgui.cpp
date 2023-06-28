@@ -34,7 +34,7 @@ void AppGui::NewFrame()
 
 void AppGui::Setup()
 {
-    static bool show_demo_window = true;
+    static bool show_demo_window = false;
     static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     static float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
     static float mainMenuBarHeight = ImGui::GetWindowSize().y - ImGui::GetContentRegionAvail().y - titleBarHeight;
@@ -44,7 +44,7 @@ void AppGui::Setup()
     ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f + titleBarHeight));
     ImGui::Begin("Fullscreen Window", nullptr, window_flags); // Create a transparent window with no title bar
 
-    ImGui::Text("FPS: %i", Application::GetCurrentApplication()->GetCurrentFPS());
+    ImGui::Text("FPS: %i\nFrametime: %0.5f", Application::GetCurrentApplication()->GetCurrentFPS(), 1.f / Application::GetCurrentApplication()->GetCurrentFPS());
 
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
@@ -53,13 +53,21 @@ void AppGui::Setup()
     {
         if (ImGui::BeginMenu("File"))
         {
+            if (ImGui::MenuItem("Toggle Demo"))
+            {
+                show_demo_window = !show_demo_window;
+            }
+            if (ImGui::MenuItem("Toggle Fullscreen"))
+            {
+                Application::GetCurrentApplication()->ToggleFullScreen();
+            }
             if (ImGui::MenuItem("Maximize"))
             {
-                glfwMaximizeWindow(Application::GetCurrentApplication()->getCurrentContext());
+                Application::GetCurrentApplication()->MaximizeWindow();
             }
             if (ImGui::MenuItem("Minimize"))
             {
-                glfwRestoreWindow(Application::GetCurrentApplication()->getCurrentContext());
+                Application::GetCurrentApplication()->MinimizeWindow();
             }
             if (ImGui::MenuItem("Quit", "Alt+F4"))
             {
