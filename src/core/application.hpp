@@ -9,10 +9,11 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
+#include <core/appgui.hpp>
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
-#include <core/triangle.hpp>
-#include <gui/appgui.hpp>
+
+#include <primitives/triangle.hpp>
 
 #include <chrono>
 #include <string>
@@ -24,10 +25,10 @@ class Application
 public:
     static Application *Create(const char *windowTitle, const int &windowWidth, const int &windowHeight);
     static Application *GetCurrentApplication();
-    static void Terminate();
 
 public:
     void Run();
+    void Terminate();
     void ToggleFullScreen();
     void MaximizeWindow();
     void MinimizeWindow();

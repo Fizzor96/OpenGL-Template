@@ -1,4 +1,4 @@
-#include <gui/appgui.hpp>
+#include <core/appgui.hpp>
 
 AppGui::AppGui(GLFWwindow *window)
 {
