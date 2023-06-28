@@ -12,6 +12,8 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
+class Application;
+
 class AppGui
 {
 public:
@@ -26,6 +28,7 @@ public:
 private:
     void SetupImGuiStyle();
     std::string mystr;
+    Application *app;
 };
 
 #endif // __APPGUI_H__

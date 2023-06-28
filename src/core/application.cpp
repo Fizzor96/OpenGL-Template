@@ -116,28 +116,26 @@ void Application::Run()
 
 void Application::ToggleFullScreen()
 {
-    isfullscreen = glfwGetWindowMonitor(window) != NULL;
-    if (isfullscreen)
+    if ((glfwGetWindowMonitor(window) != NULL))
     {
         glfwSetWindowMonitor(window, NULL, 50, 50, windowWidth, windowHeight, 0);
-        spdlog::info("ToggleFullScreen() called");
+        glfwRestoreWindow(window);
+        spdlog::info("ToggleFullScreen() off");
     }
     else
     {
         GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
         const GLFWvidmode *videoMode = glfwGetVideoMode(primaryMonitor);
         glfwSetWindowMonitor(window, primaryMonitor, 50, 50, videoMode->width, videoMode->height, videoMode->refreshRate);
-        spdlog::info("ToggleFullScreen() called");
+        spdlog::info("ToggleFullScreen() on");
     }
 }
 
 void Application::MaximizeWindow()
 {
-    isfullscreen = glfwGetWindowMonitor(window) != NULL;
-    if (!isfullscreen)
+    if (!(glfwGetWindowMonitor(window) != NULL))
     {
-        maximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
-        if (!maximized)
+        if (!(glfwGetWindowAttrib(window, GLFW_MAXIMIZED)))
         {
             glfwMaximizeWindow(window);
             spdlog::info("MaximizeWindow() called");
@@ -147,13 +145,12 @@ void Application::MaximizeWindow()
 
 void Application::MinimizeWindow()
 {
-    isfullscreen = glfwGetWindowMonitor(window) != NULL;
-    if (!isfullscreen)
+    if (!(glfwGetWindowMonitor(window) != NULL))
     {
-        maximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
-        if (maximized)
+        if ((glfwGetWindowAttrib(window, GLFW_MAXIMIZED)))
         {
             glfwRestoreWindow(window);
+            glfwSetWindowPos(window, 50, 50);
             spdlog::info("MinimzeWindow() called");
         }
     }

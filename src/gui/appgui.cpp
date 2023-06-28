@@ -2,6 +2,7 @@
 
 AppGui::AppGui(GLFWwindow *window)
 {
+    app = Application::GetCurrentApplication();
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
@@ -44,7 +45,7 @@ void AppGui::Setup()
     ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f + titleBarHeight));
     ImGui::Begin("Fullscreen Window", nullptr, window_flags); // Create a transparent window with no title bar
 
-    ImGui::Text("FPS: %i\nFrametime: %0.5f", Application::GetCurrentApplication()->GetCurrentFPS(), 1.f / Application::GetCurrentApplication()->GetCurrentFPS());
+    ImGui::Text("FPS: %i\nFrametime: %0.5f", app->GetCurrentFPS(), 1.f / app->GetCurrentFPS());
 
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
@@ -59,19 +60,19 @@ void AppGui::Setup()
             }
             if (ImGui::MenuItem("Toggle Fullscreen"))
             {
-                Application::GetCurrentApplication()->ToggleFullScreen();
+                app->ToggleFullScreen();
             }
             if (ImGui::MenuItem("Maximize"))
             {
-                Application::GetCurrentApplication()->MaximizeWindow();
+                app->MaximizeWindow();
             }
             if (ImGui::MenuItem("Minimize"))
             {
-                Application::GetCurrentApplication()->MinimizeWindow();
+                app->MinimizeWindow();
             }
             if (ImGui::MenuItem("Quit", "Alt+F4"))
             {
-                Application::GetCurrentApplication()->Terminate();
+                app->Terminate();
             }
             ImGui::EndMenu();
         }
