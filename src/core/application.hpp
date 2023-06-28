@@ -55,6 +55,7 @@ private:
     void initFpsRelatedVars();
     void setViewport();
     void cleanup();
+    static void framebufferSizeCallback(GLFWwindow *window, int width, int height);
 
 private:
     Triangle *triangle;

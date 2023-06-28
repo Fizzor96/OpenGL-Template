@@ -6,11 +6,10 @@ AppGui::AppGui(GLFWwindow *window)
     ImGui::CreateContext();
 
     ImGuiIO &io = ImGui::GetIO();
-    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
-    // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
+    io.FontGlobalScale = 1.5f;
 
     ImGui::StyleColorsDark();
 
@@ -35,66 +34,46 @@ void AppGui::NewFrame()
 
 void AppGui::Setup()
 {
-    // Main DockSpace
-    static bool open = true;
     static bool show_demo_window = true;
-    static bool show_another_window = false;
+    static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    static float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
+    static float mainMenuBarHeight = ImGui::GetWindowSize().y - ImGui::GetContentRegionAvail().y - titleBarHeight;
 
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoBackground;
+    ImGui::SetNextWindowSize(ImVec2((ImGui::GetIO().DisplaySize).x, (ImGui::GetIO().DisplaySize).y - titleBarHeight));
+    ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f + titleBarHeight));
+    ImGui::Begin("Fullscreen Window", nullptr, window_flags); // Create a transparent window with no title bar
 
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-        window_flags |= ImGuiWindowFlags_NoBackground;
+    ImGui::Text("FPS: %i", Application::GetCurrentApplication()->GetCurrentFPS());
 
-    ImGuiViewport *viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->Pos);
-    ImGui::SetNextWindowSize(viewport->Size);
-    ImGui::SetNextWindowViewport(viewport->ID);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    ImGui::Begin("DockSpace Demo", &open, window_flags);
-    ImGui::PopStyleVar(3);
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
 
-    ImGuiIO &io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    if (ImGui::BeginMainMenuBar())
     {
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-
-        if (ImGui::BeginMenuBar())
+        if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::BeginMenu("File"))
+            if (ImGui::MenuItem("Maximize"))
             {
-                // File menu items
-                ImGui::EndMenu();
+                glfwMaximizeWindow(Application::GetCurrentApplication()->getCurrentContext());
             }
-            if (ImGui::BeginMenu("View"))
+            if (ImGui::MenuItem("Minimize"))
             {
-                // View menu items
-                ImGui::EndMenu();
+                glfwRestoreWindow(Application::GetCurrentApplication()->getCurrentContext());
             }
-            ImGui::EndMenuBar();
+            if (ImGui::MenuItem("Quit", "Alt+F4"))
+            {
+                Application::GetCurrentApplication()->Terminate();
+            }
+            ImGui::EndMenu();
         }
-
-        ImGui::Begin("Hello, Docking!");
-        ImGui::Text("This is some content.");
-        ImGui::End();
-
-        if (show_demo_window)
-        {
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
-
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);
-            ImGui::Text("Hello from another window!");
-            ImGui::End();
-        }
-
-        ImGui::End();
+        ImGui::EndMainMenuBar();
     }
+
+    // Dock windows to the whole screen sides
+    ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, titleBarHeight), ImGuiDockNodeFlags_PassthruCentralNode);
+    ImGui::End();
 
     // DO NOT DELETE RENDER FROM HERE!!!!
     ImGui::Render();
@@ -113,22 +92,4 @@ void AppGui::ProcessEvent(const GLFWwindow *window, const int key, const int sca
 
 void AppGui::SetupImGuiStyle()
 {
-    // ImGuiStyle &style = ImGui::GetStyle();
-    // style.WindowRounding = 0.0f;
-    // style.WindowBorderSize = 0.0f;
-    // style.WindowPadding = ImVec2(0.0f, 0.0f);
-    // style.FramePadding = ImVec2(4.0f, 2.0f);
-    // style.ItemSpacing = ImVec2(8.0f, 4.0f);
-    // style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-    // style.IndentSpacing = 21.0f;
-    // style.ScrollbarSize = 10.0f;
-    // style.ScrollbarRounding = 0.0f;
-    // style.GrabMinSize = 7.0f;
-
-    // style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-
-    // style.Colors[ImGuiCol_WindowBg] = ImVec4(0.2f, 0.2f, 0.2f, 0.7f);
-    // style.Colors[ImGuiCol_TitleBg] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
-    // style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);
-    // style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.1f, 0.1f, 0.1f, 0.75f);
 }

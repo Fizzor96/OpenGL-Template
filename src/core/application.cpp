@@ -2,6 +2,11 @@
 
 Application *Application::currentApplication = nullptr;
 
+void Application::framebufferSizeCallback(GLFWwindow *window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
 Application *Application::Create(const char *windowTitle, const int &windowWidth, const int &windowHeight)
 {
     spdlog::set_pattern("[%H:%M:%S] [%^%l%$] %v");
@@ -28,7 +33,7 @@ void Application::Terminate()
 }
 
 Application::Application(const char *windowTitle, const int &windowWidth, const int &windowHeight)
-    : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle)
+    : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle), appgui(nullptr)
 {
 }
 
@@ -127,6 +132,8 @@ void Application::createWindow()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+    // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE); // Disable window frame and decorations
 
     window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), nullptr, nullptr);
     if (!window)
@@ -138,6 +145,8 @@ void Application::createWindow()
 
     // glfwSwapInterval(0);
     glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+    glfwSetFramebufferSizeCallback(window, Application::framebufferSizeCallback);
+    glfwMaximizeWindow(window);
 }
 
 void Application::setupContext()
@@ -219,5 +228,7 @@ void Application::cleanup()
     {
         glfwDestroyWindow(window);
         glfwTerminate();
+        if (appgui != nullptr)
+            delete appgui;
     }
 }
