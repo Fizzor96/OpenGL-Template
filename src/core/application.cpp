@@ -45,8 +45,10 @@ void Application::Terminate()
 }
 
 Application::Application(const char *windowTitle, const int &windowWidth, const int &windowHeight)
-    : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle), appgui(nullptr)
+    : window(nullptr), windowWidth(windowWidth), windowHeight(windowHeight), windowTitle(windowTitle)
 {
+    triangle = nullptr;
+    appgui = nullptr;
 }
 
 Application::~Application()
@@ -118,16 +120,17 @@ void Application::ToggleFullScreen()
 {
     if ((glfwGetWindowMonitor(window) != NULL))
     {
-        glfwSetWindowMonitor(window, NULL, 50, 50, windowWidth, windowHeight, 0);
         glfwRestoreWindow(window);
-        spdlog::info("ToggleFullScreen() off");
+        glfwSetWindowMonitor(window, NULL, 50, 50, windowWidth, windowHeight, 0);
+        glfwSetWindowPos(window, 50, 50);
+        spdlog::info("ToggleFullScreen: off");
     }
     else
     {
         GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
         const GLFWvidmode *videoMode = glfwGetVideoMode(primaryMonitor);
         glfwSetWindowMonitor(window, primaryMonitor, 50, 50, videoMode->width, videoMode->height, videoMode->refreshRate);
-        spdlog::info("ToggleFullScreen() on");
+        spdlog::info("ToggleFullScreen: on");
     }
 }
 
@@ -138,7 +141,7 @@ void Application::MaximizeWindow()
         if (!(glfwGetWindowAttrib(window, GLFW_MAXIMIZED)))
         {
             glfwMaximizeWindow(window);
-            spdlog::info("MaximizeWindow() called");
+            spdlog::info("MaximizeWindow");
         }
     }
 }
@@ -151,7 +154,7 @@ void Application::MinimizeWindow()
         {
             glfwRestoreWindow(window);
             glfwSetWindowPos(window, 50, 50);
-            spdlog::info("MinimzeWindow() called");
+            spdlog::info("MinimzeWindow");
         }
     }
 }
@@ -170,12 +173,11 @@ void Application::initialize()
 
 void Application::initFpsRelatedVars()
 {
-    fpsToleranceLimitMultiplyer = 1.0;
     targetfps = 60;
     fps = 0;
     previousTime = std::chrono::high_resolution_clock::now();
     deltaTime = 0.0;
-    targetFrameTime = (1.0 / targetfps) * fpsToleranceLimitMultiplyer;
+    targetFrameTime = 1.0 / targetfps;
     showFpsInWindowTitle = false;
 }
 
@@ -247,7 +249,7 @@ GLFWwindow *Application::getCurrentContext()
 void Application::SetFrameRate(unsigned int fps)
 {
     targetfps = fps;
-    targetFrameTime = (1.0 / targetfps) * fpsToleranceLimitMultiplyer;
+    targetFrameTime = 1.0 / targetfps;
     spdlog::info("TargetFramerate set to: {} FPS", targetfps);
 }
 
@@ -272,7 +274,5 @@ void Application::cleanup()
     {
         glfwDestroyWindow(window);
         glfwTerminate();
-        if (appgui != nullptr)
-            delete appgui;
     }
 }

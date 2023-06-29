@@ -17,12 +17,10 @@ set(DEPENDENCY_INCLUDES
     ${PROJECT_SOURCE_DIR}/deps/glm/include
     ${PROJECT_SOURCE_DIR}/deps/spdlog/include
     ${PROJECT_SOURCE_DIR}/deps/freetype/include
-    ${PROJECT_SOURCE_DIR}/deps/imgui/backends
     ${PROJECT_SOURCE_DIR}/deps/imgui
 )
 
 set(GLFW_DIR "${PROJECT_SOURCE_DIR}/deps/glfw-3.3.8/glfw")
-
 set(APPLICATION_INCLUDES
     ${PROJECT_SOURCE_DIR}/src
 )
@@ -34,22 +32,21 @@ set(DEPENDENCY_LIBS
     freetype
 )
 
-set(SUBSYS_WIN OFF CACHE BOOL "set the subsystem to windows if enabled (Windows - MSVC)")
-
 if(MSVC)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC)
-    add_compile_definitions(MSVC)
+    set(DEBUG_CONSOLE TRUE CACHE BOOL "set the subsys to windows (means no console)")
 
-    if(SUBSYS_WIN)
-        add_compile_definitions(SUBSYS_WIN)
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
-        add_executable(${CMAKE_PROJECT_NAME} WIN32 src/main.cpp)
-    else()
+    if(DEBUG_CONSOLE)
+        # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC/CONSOLE)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
         add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
-    endif(SUBSYS_WIN)
+    else()
+        add_compile_definitions(NODEBUG)
+        # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC/WIN32)
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
+        add_executable(${CMAKE_PROJECT_NAME} WIN32 src/main.cpp)
+    endif(DEBUG_CONSOLE)
 else()
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/UNIX)
+    # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/UNIX)
     add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
 endif(MSVC)
 

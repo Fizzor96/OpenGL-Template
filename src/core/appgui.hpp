@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <imgui_internal.h>
 #include <spdlog/spdlog.h>
 #include <string>
 

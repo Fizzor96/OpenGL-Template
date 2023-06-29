@@ -17,6 +17,7 @@
 
 #include <chrono>
 #include <string>
+#include <thread>
 
 class AppGui;
 
@@ -71,7 +72,6 @@ private:
 private:
     bool showFpsInWindowTitle;
     unsigned int targetfps, fps;
-    double fpsToleranceLimitMultiplyer;
     std::chrono::high_resolution_clock::time_point previousTime, currentTime;
     long double targetFrameTime, deltaTime;
 };

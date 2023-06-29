@@ -1,6 +1,5 @@
 #include "triangle.hpp"
 
-// Vertex shader source code
 const char *vertexShaderSource = R"(
     #version 330 core
     layout (location = 0) in vec3 aPos;
@@ -11,7 +10,6 @@ const char *vertexShaderSource = R"(
     }
 )";
 
-// Fragment shader source code
 const char *fragmentShaderSource = R"(
     #version 330 core
     out vec4 FragColor;
@@ -25,17 +23,14 @@ const char *fragmentShaderSource = R"(
 Triangle::Triangle()
     : vertexShader(0), fragmentShader(0), shaderProgram(0), VBO(0), VAO(0)
 {
-    // Vertex shader
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
 
-    // Fragment shader
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
     glCompileShader(fragmentShader);
 
-    // Shader program
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -43,17 +38,15 @@ Triangle::Triangle()
 
     // Triangle vertices
     float vertices[] = {
-        -0.1f, -0.1f, 0.0f, // Vertex 1
-        0.1f, -0.1f, 0.0f,  // Vertex 2
-        0.0f, 0.1f, 0.0f    // Vertex 3
+        -0.5f, -0.5f, 0.0f, // Vertex 1
+        0.5f, -0.6f, 0.0f,  // Vertex 2
+        0.25f, 0.5f, 0.0f   // Vertex 3
     };
 
-    // Vertex buffer object (VBO)
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // Vertex array object (VAO)
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);

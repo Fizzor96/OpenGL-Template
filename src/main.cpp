@@ -1,5 +1,5 @@
 #include <core/application.hpp>
-#ifdef SUBSYS_WIN
+#ifdef NODEBUG
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow)
