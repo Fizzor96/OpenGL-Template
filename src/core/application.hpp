@@ -46,17 +46,13 @@ private:
 private:
     void draw();
     void update();
-    void initCustomObjects();
 
 private:
     void initialize();
-    void createWindow();
     void setupContext();
-    void initializeGLEW();
-    void initializeGLFW();
     void initializeInput();
     void initFpsRelatedVars();
-    void setViewport();
+    void initCustomObjects();
     void cleanup();
     static void framebufferSizeCallback(GLFWwindow *window, int width, int height);
 

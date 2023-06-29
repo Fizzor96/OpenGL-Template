@@ -161,11 +161,54 @@ void Application::MinimizeWindow()
 
 void Application::initialize()
 {
-    initializeGLFW();
-    createWindow();
-    setupContext();
-    initializeGLEW();
-    setViewport();
+    // GLFW Init
+    if (!glfwInit())
+    {
+        spdlog::error("Failed to initialize GLFW");
+        getchar();
+        std::exit(1);
+    }
+
+    // CREATE WINDOW
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+    // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE); // Disable window frame and decorations
+
+    window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), nullptr, nullptr);
+    if (!window)
+    {
+        glfwTerminate();
+        spdlog::error("Failed to create window");
+        std::exit(1);
+    }
+
+    glfwSwapInterval(1);
+    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+    glfwSetFramebufferSizeCallback(window, Application::framebufferSizeCallback);
+
+    // Setup Context
+    glfwMakeContextCurrent(window);
+
+    // GLEW Init
+    glewExperimental = true;
+    if (glewInit() != GLEW_OK)
+    {
+        spdlog::error("Failed to initialize GLEW");
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        std::exit(1);
+    }
+
+    int bufferWidth, bufferHeight;
+    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+    glViewport(0, 0, bufferWidth, bufferHeight);
+
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
     initializeInput();
     initFpsRelatedVars();
     initCustomObjects();
@@ -179,66 +222,6 @@ void Application::initFpsRelatedVars()
     deltaTime = 0.0;
     targetFrameTime = 1.0 / targetfps;
     showFpsInWindowTitle = false;
-}
-
-void Application::createWindow()
-{
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
-    // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE); // Disable window frame and decorations
-
-    window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), nullptr, nullptr);
-    if (!window)
-    {
-        glfwTerminate();
-        spdlog::error("Failed to create window");
-        std::exit(1);
-    }
-
-    // glfwSwapInterval(0);
-    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
-    glfwSetFramebufferSizeCallback(window, Application::framebufferSizeCallback);
-    MaximizeWindow();
-}
-
-void Application::setupContext()
-{
-    glfwMakeContextCurrent(window);
-}
-
-void Application::initializeGLEW()
-{
-    glewExperimental = true;
-    if (glewInit() != GLEW_OK)
-    {
-        spdlog::error("Failed to initialize GLEW");
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        std::exit(1);
-    }
-}
-
-void Application::initializeGLFW()
-{
-    if (!glfwInit())
-    {
-        spdlog::error("Failed to initialize GLFW");
-        getchar();
-        std::exit(1);
-    }
-}
-
-void Application::setViewport()
-{
-    int bufferWidth, bufferHeight;
-    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
-    glViewport(0, 0, bufferWidth, bufferHeight);
-
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 }
 
 GLFWwindow *Application::getCurrentContext()
