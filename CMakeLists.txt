@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(Application VERSION 0.1.0)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(OpenGL REQUIRED)
 set(OpenGL_GL_PREFERENCE GLVND)
 set(BUILD_SHARED_LIBS OFF)
@@ -33,24 +36,22 @@ set(DEPENDENCY_LIBS
 )
 
 if(MSVC)
-    set(DEBUG_CONSOLE TRUE CACHE BOOL "set the subsys to windows (means no console)")
+    set(DEBUG_CONSOLE TRUE CACHE BOOL "Set the subsys to windows (means no console)")
 
     if(DEBUG_CONSOLE)
-        # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC/CONSOLE)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
-        add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
     else()
         add_compile_definitions(NODEBUG)
-        # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/MSVC/WIN32)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
-        add_executable(${CMAKE_PROJECT_NAME} WIN32 src/main.cpp)
     endif(DEBUG_CONSOLE)
+
+    add_compile_options(/W4 /wd4100 /wd4244 /wd4706 /wd4005 /wd4267 /wd4189 /wd4458)
 else()
-    # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/UNIX)
-    add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
+    add_compile_options(-Wall -Wextra -Wpedantic -Wpragmas -Wunused-parameter)
 endif(MSVC)
 
-set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+add_executable(${CMAKE_PROJECT_NAME} WIN32 src/main.cpp)
+
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${DEPENDENCY_INCLUDES} PUBLIC ${APPLICATION_INCLUDES})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${DEPENDENCY_LIBS})
 
