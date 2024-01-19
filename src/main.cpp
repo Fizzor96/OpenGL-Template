@@ -1,20 +1,41 @@
-#include <core/application.hpp>
+#include <core/App.hpp>
 #ifdef NODEBUG
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow)
 {
-    Application *app = Application::Create("Application", 1280, 1024);
-    app->Run();
-    app->Terminate();
+    App app{"OpenGL", 1280, 1024};
+    while (!glfwWindowShouldClose(app.GetWindow()))
+    {
+
+        app.Begin();
+        if (app.GetControlled())
+        {
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            app.Update();
+            glfwSwapBuffers(app.GetWindow());
+        }
+        app.End();
+    }
     return 0;
 }
 #else
 int main()
 {
-    Application *app = Application::Create("Devel", 1280, 1024);
-    app->Run();
-    app->Terminate();
+    App app{"OpenGL", 1280, 1024};
+    while (!glfwWindowShouldClose(app.GetWindow()))
+    {
+
+        app.Begin();
+        if (app.GetControlled())
+        {
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            app.Update();
+
+            glfwSwapBuffers(app.GetWindow());
+        }
+        app.End();
+    }
     return 0;
 }
 #endif

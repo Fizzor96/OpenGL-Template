@@ -1,7 +1,7 @@
-#ifndef __APPGUI_H__
-#define __APPGUI_H__
+#ifndef __ImGui_H__
+#define __ImGui_H__
 
-#include <core/application.hpp>
+#include <core/App.hpp>
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -13,13 +13,13 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
-class Application;
+class App;
 
-class AppGui
+class Gui
 {
 public:
-    AppGui(GLFWwindow *window);
-    ~AppGui();
+    Gui(App *app);
+    ~Gui();
 
     void NewFrame();
     void Setup();
@@ -29,7 +29,6 @@ public:
 private:
     void SetupImGuiStyle();
     std::string mystr;
-    Application *app;
 };
 
-#endif // __APPGUI_H__
+#endif // __ImGui_H__

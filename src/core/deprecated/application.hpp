@@ -9,7 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
 
-#include <core/appgui.hpp>
+// #include <core/appgui.hpp>
 #include <core/keyboard.hpp>
 #include <core/mouse.hpp>
 

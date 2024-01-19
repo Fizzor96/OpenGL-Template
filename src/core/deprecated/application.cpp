@@ -9,13 +9,13 @@ void Application::framebufferSizeCallback(GLFWwindow *window, int width, int hei
 
 Application *Application::GetCurrentApplication()
 {
-    if (currentApplication != nullptr)
+    if (!currentApplication)
     {
-        return currentApplication;
+        return nullptr;
     }
     else
     {
-        return nullptr;
+        return currentApplication;
     }
 }
 
@@ -128,6 +128,7 @@ void Application::ToggleFullScreen()
     else
     {
         GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+        // GLFWmonitor *currentMonitor = glfwGetWindowMonitor();
         const GLFWvidmode *videoMode = glfwGetVideoMode(primaryMonitor);
         glfwSetWindowMonitor(window, primaryMonitor, 50, 50, videoMode->width, videoMode->height, videoMode->refreshRate);
         spdlog::info("ToggleFullScreen: on");

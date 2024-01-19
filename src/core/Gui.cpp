@@ -1,6 +1,6 @@
-#include <core/appgui.hpp>
+#include <core/Gui.hpp>
 
-void AppGui::Setup()
+void Gui::Setup()
 {
     static bool show_demo_window = false;
     static float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
@@ -9,7 +9,7 @@ void AppGui::Setup()
     ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f + titleBarHeight));
     ImGui::Begin("Fullscreen Window", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoBackground);
 
-    ImGui::Text("FPS: %i\nFrametime: %0.5f", app->GetCurrentFPS(), 1.f / app->GetCurrentFPS());
+    // ImGui::Text("FPS: %i\nFrametime: %0.5f", app->GetCurrentFPS(), 1.f / app->GetCurrentFPS());
 
     // ImGui::SetNextWindowSize(ImVec2((ImGui::GetIO().DisplaySize).x / 10, (ImGui::GetIO().DisplaySize).y - titleBarHeight));
     // ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f + titleBarHeight));
@@ -33,19 +33,19 @@ void AppGui::Setup()
             }
             if (ImGui::MenuItem("Toggle Fullscreen"))
             {
-                app->ToggleFullScreen();
+                // app->ToggleFullScreen();
             }
             if (ImGui::MenuItem("Maximize"))
             {
-                app->MaximizeWindow();
+                // app->MaximizeWindow();
             }
             if (ImGui::MenuItem("Minimize"))
             {
-                app->MinimizeWindow();
+                // app->MinimizeWindow();
             }
             if (ImGui::MenuItem("Quit", "Alt+F4"))
             {
-                app->Terminate();
+                // app->Terminate();
             }
             ImGui::EndMenu();
         }
@@ -57,9 +57,8 @@ void AppGui::Setup()
     ImGui::Render();
 }
 
-AppGui::AppGui(GLFWwindow *window)
+Gui::Gui(App *app)
 {
-    app = Application::GetCurrentApplication();
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
@@ -71,36 +70,36 @@ AppGui::AppGui(GLFWwindow *window)
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL(app->GetWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 330 core");
     mystr = "Click the button!!!";
 }
 
-AppGui::~AppGui()
+Gui::~Gui()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void AppGui::NewFrame()
+void Gui::NewFrame()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void AppGui::Render()
+void Gui::Render()
 {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void AppGui::ProcessEvent(const GLFWwindow *window, const int key, const int scancode, const int action, const int mods)
+void Gui::ProcessEvent(const GLFWwindow *window, const int key, const int scancode, const int action, const int mods)
 {
     ImGui_ImplGlfw_KeyCallback(const_cast<GLFWwindow *>(window), key, scancode, action, mods);
     ImGui_ImplGlfw_CharCallback(const_cast<GLFWwindow *>(window), static_cast<unsigned int>(key));
 }
 
-void AppGui::SetupImGuiStyle()
+void Gui::SetupImGuiStyle()
 {
 }
